@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  jupyter:
+    build: ./jupyter
+    ports: 
+      - 8888:8888
+    volumes:
+      - ./data:/workspace/data
+      - ./jupyter/notebooks/:/workspace/notebooks/
+      - ./.env:/workspace/.env
+      - ~/.cache/:/root/.cache/
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  
+  # streamlit:
+  #   build: ./streamlit_app/
+  #   environment:
+  #     - CHROMADB_HOST=chroma
+  #     - CHROMADB_PORT=8000
+  #   ports:
+  #     - 8501:8501
+  #   volumes:
+  #     - ./streamlit_app/:/app/
+  #     - ~/.cache/:/root/.cache/
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]
